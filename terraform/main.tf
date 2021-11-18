@@ -36,7 +36,7 @@ resource "aws_security_group" "prod-web-servers-sg" {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    cidr_blocks      = [aws_default_vpc.default.cidr_block]
+    cidr_blocks      = ["0.0.0.0/0"]
     
   }
 
@@ -45,7 +45,7 @@ resource "aws_security_group" "prod-web-servers-sg" {
     from_port        = 80
     to_port          = 80
     protocol         = "tcp"
-    cidr_blocks      = [aws_default_vpc.default.cidr_block]
+    cidr_blocks      = ["0.0.0.0/0"]
    
   }
 
@@ -54,7 +54,6 @@ resource "aws_security_group" "prod-web-servers-sg" {
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
@@ -83,7 +82,6 @@ resource "aws_instance" "prod-web-server-1" {
   instance_type          = "t3.large"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.prod-web-servers-sg.id]
-
   tags = {
     Name = " prod-web-server-1"
   }
@@ -105,7 +103,6 @@ resource "aws_lb" "network-lb" {
   internal           = false
   load_balancer_type = "network"
   subnets            = [aws_default_subnet.default_az1.id] 
-
   enable_deletion_protection = true
 
   tags = {
